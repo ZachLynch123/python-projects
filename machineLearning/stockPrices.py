@@ -1,5 +1,6 @@
 import pandas as pd
 import quandl
+import math
 
 df = quandl.get('WIKI/GOOGL')
 
@@ -15,6 +16,13 @@ df['PCT_change'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100
 df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 
 # Take
-forecast_col_close = 'Adj. Close'
+forecast_col = 'Adj. Close'
 
 df.fillna(-9999, inplace=True)
+
+# regression algorithm to forecast out
+forecast_out = int(math.ceil(0.1*len(df)))
+
+df['label'] = df[forecast_col].shift(-forecast_out)
+
+print(df.head())
