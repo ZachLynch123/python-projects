@@ -9,6 +9,7 @@ pylint = "*"
 [packages]
 matplotlib = "*"
 pylint = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.6"
