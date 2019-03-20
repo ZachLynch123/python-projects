@@ -13,14 +13,17 @@ with open('example.txt', 'r') as csvfile:
         y.append(int(row[1]))
 
 
-# From Numpy
+# Using Numpy
 
 w = []
 z = []
 
+w, z = np.loadtxt('example.txt', delimiter=',', unpack=True)
 
 
-plt.plot(x,y, label="loaded from file")
+
+
+plt.plot(w,z, label="loaded from file")
 
 
 plt.xlabel('x')
