@@ -1,35 +1,46 @@
 import socket
-
-
-
+import threading
+from queue import Queue
 
 # port scanner
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print_lock = threading.Lock()
 
-ip = 'pythonprogramming.net'
+target = 'pythonprogramming.net'
 
 
-def scan(port):
+def scan (port):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     try:
-        s.connect((ip, port))
-        return True
-
+        connection = s.connect((target, port))
+        with print_lock:
+            print('port ', port, "Is open!")
+        
+        connection.close()
     except:
-        return False
+        pass
 
 
-for x in range(1, 26):
-    if scan(x):
-        print ('Port ', x,'is open')
-    else:
-        print('Port',x,'is closed!')
+def threader():
+    while True:
+        worker = q.get()
+        scan(worker)
+        q.task_done()
+
+q = Queue()
+
+for x in range(100):
+    t = threading.Thread(target=threader)
+    t.daemon = True
+    t.start()
 
 
+# Testing 100 ports
+for worker in range(1, 101):
+    q.put(worker)
 
-
-
-
+q.join()
 
 
 
